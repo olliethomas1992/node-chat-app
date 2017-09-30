@@ -7,6 +7,7 @@ const socketIO = require('socket.io');
 
 /* Local Imports
 ---------------------------------------------------- */
+const { generateMessage } = require('./utils/message');
 
 /* Application Config
 ---------------------------------------------------- */
@@ -21,21 +22,26 @@ app.use(express.static(publicPath));
 /* Code
 ---------------------------------------------------- */
 io.on('connection', (socket) => {
-   console.log('New User Connected'); 
+    console.log('New User Connected');
+
+    socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
+    
+    socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));
 
     socket.on('createMessage', (message) => {
-        console.log(message);
+        io.emit('newMessage', generateMessage(message.from, message.text));
+
+        // socket.broadcast.emit('newMessage', {
+        //     from: message.from,
+        //     text: message.text,
+        //     createdAt: new Date().getTime()
+        // });
     });
 
-    socket.emit('newMessage', {
-        from: 'Mindy',
-        text: 'I have an exam tomorrow',
-        createdAt: 123453
-    });
 
-   socket.on('disconnect', () => {
-       console.log('Client Disconnected');
-   });
+    socket.on('disconnect', () => {
+        console.log('Client Disconnected');
+    });
 });
 
 /* Boot App
