@@ -18,6 +18,8 @@
     "socket.io": "^1.4.8"
   },
   "devDependencies": {
+    "eslint": "^4.8.0",
+    "eslint-config-google": "^0.9.1",
     "expect": "^1.20.2",
     "mocha": "^3.0.2"
   }
