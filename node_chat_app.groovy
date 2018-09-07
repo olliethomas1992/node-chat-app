@@ -12,6 +12,14 @@ job('Node Chat App') {
         nodejs('nodejs') 
     }
     steps {
-        shell("npm install")
+        dockerBuildAndPublish {
+            repositoryName('olliethomas1992/node-chat-app')
+            tag('${GIT_REVISION,length=9}')
+            registryCredentials('dockerhub')
+            forcePull(false)
+            forceTag(false)
+            createFingerprints(false)
+            skipDecorate()
+        }
     }
 }
