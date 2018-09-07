@@ -1,9 +1,6 @@
 job('Node Chat App') {
     scm {
-        git('git@github.com:olliethomas1992/node-chat-app.git') {  node -> // is hudson.plugins.git.GitSCM
-            node / gitConfigName('Ollie Thomas')
-            node / gitConfigEmail('ollie.thomas1992@gmail.com')
-        }
+        git('git@github.com:olliethomas1992/node-chat-app.git')
     }
     triggers {
         scm('H/5 * * * *')
