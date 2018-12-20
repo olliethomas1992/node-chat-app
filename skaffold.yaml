@@ -1,0 +1,31 @@
+apiVersion: skaffold/v1alpha2
+kind: Config
+build:
+  tagPolicy:
+    envTemplate:
+      template: "{{.DOCKER_REGISTRY}}/ollie-thomas1992-gmail-com/node-chat-app:{{.VERSION}}"
+  artifacts:
+  - imageName: changeme
+    workspace: .
+    docker: {}
+  local: {}
+deploy:
+  kubectl:
+    manifests:
+profiles:
+- name: dev
+  build:
+    tagPolicy:
+      envTemplate:
+        template: "{{.DOCKER_REGISTRY}}/ollie-thomas1992-gmail-com/node-chat-app:{{.DIGEST_HEX}}"
+    artifacts:
+    - docker: {}
+    local: {}
+  deploy:
+    helm:
+      releases:
+      - name: node-chat-app
+        chartPath: charts/node-chat-app
+        setValueTemplates:
+          image.repository: "{{.DOCKER_REGISTRY}}/ollie-thomas1992-gmail-com/node-chat-app"
+          image.tag: "{{.DIGEST_HEX}}"
